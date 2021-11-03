@@ -70,22 +70,61 @@ local function placeSapling()
 end
 
 local function destroyTree()
+    local isBig = false
     if getType(getId()) == 'log' then
         turtle.dig()
         turtle.forward()
+        if getType(getId()) == 'log' then
+            isBig = true
+            turtle.dig()
+        end
         while getType(getIdUp()) == 'log' do
             turtle.digUp()
             turtle.up()
+            if isBig then
+                turtle.dig()
+            end
         end
 
-        while not turtle.detectDown() do
-            turtle.down()
+        if isBig then
+            turtle.turnLeft()
+
+            if not getType(getId()) == 'log' then
+                turtle.turnRight()
+                turtle.turnRight()
+
+                if not getType(getId()) == 'log' then
+                    isBig = false
+                    turtle.turnLeft()
+                end
+            end
+        end
+
+        if isBig then
+            turtle.dig()
+            turtle.forward()
+
+            turtle.turnLeft()
+            if not getType(getId()) == 'log' then
+                turtle.turnRight()
+                turtle.turnRight()
+            end
+
+            turtle.dig()
+
+            while getType(getIdDown()) == 'log' do
+                turtle.digDown()
+                turtle.down()
+                turtle.dig()
+            end
+        else
+            while not turtle.detectDown() do
+                turtle.down()
+            end
         end
         turtle.back()
 
-
         return true
-
     end
 
     return false
