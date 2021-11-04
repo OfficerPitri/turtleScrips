@@ -130,5 +130,7 @@ local function destroyTree()
     return false
 end
 
-destroyTree()
-placeSapling()
+while true do
+    destroyTree()
+    placeSapling()
+end
